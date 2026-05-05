@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OpportunitiesZA — Social Toolkit</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--g:#0d4a26;--a:#f59e0b;--bd:#e5e7eb;--sur:#f8fafc;--rd:#dc2626;--glt:#dcfce7; --wa:#25D366; --tw:#1DA1F2; --fb:#1877F2; --li:#0A66C2;}
+  body{font-family:system-ui,'DM Sans',sans-serif;background:#f1f5f9;padding:24px;font-size:14px;color:#111;}
+  .wrap{max-width:900px;margin:0 auto}
+  .header{background:linear-gradient(135deg, var(--g), #116232);color:#fff;border-radius:12px;padding:24px 28px;margin-bottom:24px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 12px rgba(13,74,38,0.15)}
+  .header-icon{font-size:32px; background:rgba(255,255,255,0.1); width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:12px;}
+  .header h1{font-size:22px;font-weight:700;margin-bottom:4px; letter-spacing:-0.5px;}
+  .header p{font-size:14px;color:#a7f3d0}
+  
+  .grid{display:grid;grid-template-columns:350px 1fr;gap:24px;}
+  @media(max-width:768px){.grid{grid-template-columns:1fr;}}
+  
+  .card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+  .card h2{font-size:16px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+  
+  .field{margin-bottom:16px}
+  label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#4b5563;margin-bottom:6px}
+  input,textarea,select{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.15s,box-shadow 0.15s; background:#fff;}
+  input:focus,textarea:focus,select:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(13,74,38,.1)}
+  textarea{resize:vertical;min-height:80px;line-height:1.5}
+  
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:8px;font-weight:600;font-size:13.5px;border:none;cursor:pointer;transition:all .15s}
+  .btn-primary{background:var(--g);color:#fff}.btn-primary:hover{background:#083318}
+  .btn-sm{padding:6px 12px;font-size:12px;border-radius:6px;}
+  
+  .tabs{display:flex;gap:4px;margin-bottom:16px;background:#f8fafc;padding:4px;border-radius:10px;border:1px solid var(--bd);}
+  .tab{flex:1;text-align:center;padding:8px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;border-radius:6px;transition:0.2s;}
+  .tab:hover{color:#0f172a;}
+  .tab.active{background:#fff;color:var(--g);box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+  
+  .preview-box{background:#f8fafc;border:1px solid var(--bd);border-radius:12px;padding:20px;font-family:system-ui;margin-bottom:16px; white-space:pre-wrap; line-height:1.5; font-size:15px; color:#1c1e21;}
+  
+  .wa-preview{border-left:4px solid var(--wa);}
+  .fb-preview{border-left:4px solid var(--fb);}
+  .tw-preview{border-left:4px solid var(--tw);}
+  .li-preview{border-left:4px solid var(--li);}
+  
+  .char-count{font-family:'DM Mono',monospace;font-size:12px;color:#64748b;text-align:right;}
+  .char-count.warn{color:var(--a);}
+  .char-count.error{color:var(--rd);}
+  
+  .copy-bar{display:flex;justify-content:flex-end;gap:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="header-icon">📢</div>
+    <div>
+      <h1>OpportunitiesZA — Social Toolkit</h1>
+      <p>Generate optimized social media posts for WhatsApp, Facebook, Twitter, and LinkedIn.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Input Section -->
+    <div class="card">
+      <h2>Opportunity Details</h2>
+      
+      <div class="field">
+        <label>Job / Programme Title</label>
+        <input type="text" id="f_title" placeholder="e.g. Eskom Engineer Learnership" oninput="generateAll()">
+      </div>
+      
+      <div class="field">
+        <label>Type</label>
+        <select id="f_type" onchange="generateAll()">
+          <option value="Learnership">Learnership</option>
+          <option value="Internship">Internship</option>
+          <option value="Bursary">Bursary</option>
+          <option value="Apprenticeship">Apprenticeship</option>
+          <option value="Job">Entry-Level Job</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Location</label>
+        <input type="text" id="f_loc" placeholder="e.g. Gauteng / Nationwide" oninput="generateAll()">
+      </div>
+      
+      <div class="field">
+        <label>Requirements (Short)</label>
+        <input type="text" id="f_req" placeholder="e.g. Matric + Unemployed" oninput="generateAll()">
+      </div>
+
+      <div class="field">
+        <label>Closing Date</label>
+        <input type="date" id="f_close" onchange="generateAll()">
+      </div>
+      
+      <div class="field">
+        <label>Short Link</label>
+        <input type="text" id="f_link" placeholder="e.g. oppz.co/eskom" oninput="generateAll()">
+      </div>
+
+      <button class="btn btn-primary" style="width:100%" onclick="document.querySelectorAll('input').forEach(i=>i.value='');generateAll()">Reset Fields</button>
+    </div>
+
+    <!-- Output Section -->
+    <div class="card" style="display:flex;flex-direction:column;">
+      <h2>
+        <span>Generated Posts</span>
+        <div class="char-count" id="c_count">0 chars</div>
+      </h2>
+
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('wa')">WhatsApp</div>
+        <div class="tab" onclick="switchTab('fb')">Facebook</div>
+        <div class="tab" onclick="switchTab('li')">LinkedIn</div>
+        <div class="tab" onclick="switchTab('tw')">Twitter/X</div>
+      </div>
+
+      <div id="out_wa" class="preview-box wa-preview"></div>
+      <div id="out_fb" class="preview-box fb-preview" style="display:none"></div>
+      <div id="out_li" class="preview-box li-preview" style="display:none"></div>
+      <div id="out_tw" class="preview-box tw-preview" style="display:none"></div>
+
+      <div style="flex:1"></div>
+      
+      <div class="copy-bar">
+        <button class="btn btn-primary" onclick="copyActive()">📋 Copy to Clipboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentTab = 'wa';
+
+function switchTab(t) {
+  currentTab = t;
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.tab[onclick="switchTab('\${t}')"]`).classList.add('active');
+  
+  ['wa','fb','li','tw'].forEach(x => {
+    document.getElementById('out_'+x).style.display = (x===t) ? 'block' : 'none';
+  });
+  
+  updateCount();
+}
+
+function formatDate(dStr) {
+  if(!dStr) return '[Date]';
+  const d = new Date(dStr);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function generateAll() {
+  const title = document.getElementById('f_title').value || '[Title]';
+  const type = document.getElementById('f_type').value;
+  const loc = document.getElementById('f_loc').value || '[Location]';
+  const req = document.getElementById('f_req').value || '[Requirements]';
+  const close = formatDate(document.getElementById('f_close').value);
+  const link = document.getElementById('f_link').value || '[Link]';
+
+  // WhatsApp
+  document.getElementById('out_wa').textContent = `🚨 *NEW \${type.toUpperCase()}* 🚨\n\n📌 *\${title}*\n📍 Location: \${loc}\n🎓 Requires: \${req}\n⏳ Closes: \${close}\n\n👇 *Apply Online Here* 👇\n\${link}\n\n_Please share with someone who needs this!_ 🔄`;
+
+  // Facebook
+  document.getElementById('out_fb').textContent = `📢 NEW \${type.toUpperCase()} OPPORTUNITY 📢\n\nAre you looking for an opportunity in \${loc === '[Location]' ? 'South Africa' : loc}? \n\n📌 \${title}\n🎓 Minimum requirement: \${req}\n⏳ Closing date: \${close}\n\nClick the link below for full details and to apply online:\n👉 \${link}\n\nDon't forget to TAG a friend or SHARE this post to help others! 🇿🇦\n\n#\${type}s2026 #YouthEmployment #OpportunitiesZA #JobsSA`;
+
+  // LinkedIn
+  document.getElementById('out_li').textContent = `New \${type} Opportunity Alert 🚀\n\nWe've just listed a new \${type.toLowerCase()} opportunity that might be perfect for your network:\n\n🏢 \${title}\n📍 \${loc}\n📋 Requirements: \${req}\n⏰ Applications close: \${close}\n\nFull details and application link here: \n🔗 \${link}\n\nKindly share or tag someone in your network who could benefit from this opportunity. Let's tackle youth unemployment together! 🤝\n\n#SouthAfrica #YouthDevelopment #Careers #\${type} #\${loc.replace(/\\s+/g, '')}`;
+
+  // Twitter
+  document.getElementById('out_tw').textContent = `🚨 \${type} Alert 🚨\n\n📌 \${title}\n📍 \${loc}\n🎓 Req: \${req}\n⏳ Closes: \${close}\n\nApply here: \${link}\n\nRT to help a job seeker! 🇿🇦\n#\${type} #JobsSA #Youth`;
+
+  updateCount();
+}
+
+function updateCount() {
+  const text = document.getElementById('out_' + currentTab).textContent;
+  const c = text.length;
+  const el = document.getElementById('c_count');
+  el.textContent = c + ' chars';
+  el.className = 'char-count';
+  
+  if(currentTab === 'tw') {
+    if(c > 280) el.classList.add('error');
+    else if(c > 250) el.classList.add('warn');
+  }
+}
+
+function copyActive() {
+  const text = document.getElementById('out_' + currentTab).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = document.querySelector('.copy-bar .btn').innerHTML;
+    document.querySelector('.copy-bar .btn').innerHTML = '✅ Copied!';
+    setTimeout(() => { document.querySelector('.copy-bar .btn').innerHTML = orig }, 2000);
+  });
+}
+
+// Initial gen
+generateAll();
+</script>
+</body>
+</html>

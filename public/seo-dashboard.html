@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OpportunitiesZA — SEO & Performance Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g:#0d4a26;--gd:#083318;--glt:#dcfce7;--gmid:#166534;
+  --a:#f59e0b;--alt:#fef3c7;--ald:#d97706;
+  --bl:#1e40af;--blt:#dbeafe;
+  --pu:#6b21a8;--plt:#f3e8ff;
+  --rd:#dc2626;--rlt:#fee2e2;
+  --bd:#e2e8f0;--mu:#64748b;--sur:#f8fafc;--wh:#fff;
+  --tx:#0f172a;--t2:#334155;--t3:#64748b;
+  --bg:#0b1220;--bg2:#111827;--bg3:#1e2a3a;--bg4:#253347;
+  --card-border:rgba(255,255,255,.07);
+  --sh:0 1px 4px rgba(0,0,0,.18);
+  --shm:0 4px 24px rgba(0,0,0,.28);
+  --r:12px;--tr:all .18s ease;
+}
+
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;font-size:14px;color:#e2e8f0;background:var(--bg);line-height:1.6;min-height:100vh}
+h1,h2,h3,h4{font-family:'Fraunces',serif}
+a{color:var(--a)}
+code,kbd,.mono{font-family:'DM Mono',monospace}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:#334155;border-radius:3px}
+
+/* ── TOPBAR ── */
+#topbar{background:linear-gradient(90deg,var(--gd) 0%,var(--g) 60%,#116232 100%);padding:0 28px;height:58px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.35)}
+.logo-wrap{display:flex;align-items:center;gap:10px}
+.logo-icon{width:30px;height:30px;background:rgba(255,255,255,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.logo-text{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:#fff;letter-spacing:-.4px}
+.logo-text em{color:var(--a);font-style:normal}
+.tag{font-family:'DM Mono',monospace;font-size:10px;background:rgba(245,158,11,.2);color:var(--a);border:1px solid rgba(245,158,11,.35);padding:2px 9px;border-radius:10px;letter-spacing:.8px;text-transform:uppercase;margin-left:4px}
+#last-updated{margin-left:auto;font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,.5)}
+.ref-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;transition:var(--tr)}
+.ref-btn:hover{background:rgba(255,255,255,.2)}
+
+/* ── LAYOUT ── */
+.shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 58px)}
+
+/* ── SIDEBAR ── */
+#sidebar{background:var(--bg2);border-right:1px solid rgba(255,255,255,.06);padding:24px 0;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto}
+.nav-section{padding:0 16px;margin-bottom:20px}
+.nav-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1.5px;padding:0 8px;margin-bottom:8px;display:block}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:#94a3b8;font-size:13px;font-weight:500;cursor:pointer;transition:var(--tr);width:100%;background:none;border:none;text-align:left}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#e2e8f0}
+.nav-item.active{background:rgba(13,74,38,.45);color:#86efac;font-weight:600}
+.nav-item .ni{font-size:15px;width:20px;text-align:center}
+.nav-divider{height:1px;background:rgba(255,255,255,.06);margin:8px 16px}
+
+/* ── CONTENT ── */
+#content{padding:32px;overflow-y:auto;background:var(--bg)}
+.page-section{display:none}
+.page-section.active{display:block;animation:fadeUp .25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── PAGE HEADER ── */
+.ph{margin-bottom:28px}
+.ph h1{font-size:clamp(22px,3vw,30px);font-weight:900;color:#f8fafc;letter-spacing:-.5px;margin-bottom:6px}
+.ph p{color:var(--mu);font-size:14px}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:28px}
+.kpi{background:var(--bg2);border:1px solid var(--card-border);border-radius:var(--r);padding:18px 20px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi.green::before{background:var(--g)}
+.kpi.amber::before{background:var(--a)}
+.kpi.blue::before{background:var(--bl)}
+.kpi.purple::before{background:var(--pu)}
+.kpi.red::before{background:var(--rd)}
+.kpi-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.kpi-val{font-family:'Fraunces',serif;font-size:30px;font-weight:900;color:#f8fafc;line-height:1;margin-bottom:4px}
+.kpi-sub{font-size:11.5px;color:var(--mu)}
+.kpi-delta{font-family:'DM Mono',monospace;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;display:inline-block;margin-top:6px}
+.delta-up{background:rgba(13,74,38,.4);color:#86efac}
+.delta-down{background:rgba(220,38,38,.2);color:#fca5a5}
+.delta-flat{background:rgba(100,116,139,.2);color:#94a3b8}
+
+/* ── PANELS ── */
+.panel{background:var(--bg2);border:1px solid var(--card-border);border-radius:var(--r);margin-bottom:20px;overflow:hidden}
+.panel-hdr{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.panel-hdr h3{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:#e2e8f0}
+.panel-hdr .ph-sub{font-size:12px;color:var(--mu);font-family:'DM Mono',monospace}
+.panel-body{padding:20px}
+
+/* ── TABLE ── */
+.dtable{width:100%;border-collapse:collapse;font-size:13px}
+.dtable th{text-align:left;font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;padding:0 14px 12px;font-weight:500}
+.dtable td{padding:11px 14px;border-top:1px solid rgba(255,255,255,.05);color:#cbd5e1}
+.dtable tr:hover td{background:rgba(255,255,255,.03)}
+.dtable .td-title{color:#e2e8f0;font-weight:500;max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dtable .td-mono{font-family:'DM Mono',monospace;font-size:12px}
+.dtable .td-url{font-family:'DM Mono',monospace;font-size:11px;color:var(--mu);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── BADGE / PILL ── */
+.pill{font-family:'DM Mono',monospace;font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;display:inline-block;letter-spacing:.4px}
+.pill-g{background:rgba(13,74,38,.4);color:#86efac}
+.pill-a{background:rgba(245,158,11,.2);color:#fbbf24}
+.pill-b{background:rgba(30,64,175,.3);color:#93c5fd}
+.pill-r{background:rgba(220,38,38,.2);color:#fca5a5}
+.pill-p{background:rgba(107,33,168,.3);color:#d8b4fe}
+.pill-mu{background:rgba(100,116,139,.2);color:#94a3b8}
+
+/* ── SCORE RING ── */
+.score-ring-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.score-ring{position:relative;width:90px;height:90px}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring .track{fill:none;stroke:rgba(255,255,255,.07);stroke-width:8}
+.score-ring .fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.4s ease}
+.score-ring .val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:#f8fafc}
+.score-ring-label{font-size:11px;color:var(--mu);text-align:center;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.8px}
+
+/* ── SCORE GRID ── */
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:20px;padding:24px}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{margin-bottom:14px}
+.prog-label{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12.5px;color:#cbd5e1}
+.prog-label span:last-child{font-family:'DM Mono',monospace;font-size:11px;color:var(--mu)}
+.prog-track{background:rgba(255,255,255,.06);border-radius:6px;height:7px;overflow:hidden}
+.prog-bar{height:100%;border-radius:6px;transition:width 1.2s ease}
+
+/* ── CHECKLIST ── */
+.clist{list-style:none;display:flex;flex-direction:column;gap:2px}
+.ci{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;border-radius:8px}
+.ci:hover{background:rgba(255,255,255,.04)}
+.ci-ico{flex-shrink:0;font-size:15px;margin-top:1px}
+.ci-body{flex:1}
+.ci-title{font-size:13.5px;color:#e2e8f0;font-weight:500;margin-bottom:2px}
+.ci-sub{font-size:12px;color:var(--mu)}
+.ci-status{flex-shrink:0;margin-top:1px}
+
+/* ── TWO-COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* ── KEYWORD TABLE ── */
+.kw-priority{display:flex;align-items:center;gap:6px;font-size:12px}
+.kw-dots{display:flex;gap:2px}
+.kw-dot{width:7px;height:7px;border-radius:50%}
+.kw-dot.filled{background:var(--a)}
+.kw-dot.empty{background:rgba(255,255,255,.1)}
+
+/* ── ALERT BOX ── */
+.alert{display:flex;gap:12px;padding:14px 18px;border-radius:10px;margin-bottom:14px;font-size:13.5px}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.alert-body h4{font-weight:600;margin-bottom:3px;font-size:13.5px}
+.alert-body p{font-size:12.5px;color:var(--mu);line-height:1.55}
+.alert.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25)}
+.alert.good{background:rgba(13,74,38,.25);border:1px solid rgba(13,74,38,.5)}
+.alert.info{background:rgba(30,64,175,.2);border:1px solid rgba(30,64,175,.35)}
+
+/* ── COPY BTN ── */
+.copy-block{background:var(--bg3);border:1px solid rgba(255,255,255,.08);border-radius:9px;margin-bottom:14px;overflow:hidden}
+.copy-block-hdr{padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between}
+.copy-block-hdr span{font-family:'DM Mono',monospace;font-size:11px;color:var(--mu)}
+.copy-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:#94a3b8;padding:4px 12px;border-radius:5px;font-size:11px;cursor:pointer;font-family:'DM Mono',monospace;transition:var(--tr)}
+.copy-btn:hover{background:rgba(255,255,255,.14);color:#e2e8f0}
+.copy-block pre{padding:14px 16px;font-family:'DM Mono',monospace;font-size:12px;color:#a5b4fc;overflow-x:auto;white-space:pre-wrap;word-break:break-all;line-height:1.7}
+
+/* ── TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.tl-item:last-child{border-bottom:none}
+.tl-left{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px}
+.tl-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.tl-dot.done{background:var(--g)}
+.tl-dot.now{background:var(--a);box-shadow:0 0 8px rgba(245,158,11,.5)}
+.tl-dot.todo{background:rgba(255,255,255,.15)}
+.tl-line{flex:1;width:1px;background:rgba(255,255,255,.07);min-height:20px}
+.tl-week{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);margin-top:4px;text-align:center}
+.tl-body{flex:1}
+.tl-title{font-size:13.5px;font-weight:600;color:#e2e8f0;margin-bottom:3px}
+.tl-desc{font-size:12px;color:var(--mu);line-height:1.55}
+.tl-tag{font-family:'DM Mono',monospace;font-size:10px;padding:1px 7px;border-radius:6px;background:rgba(255,255,255,.08);color:#94a3b8;margin-left:8px}
+
+/* ── CONTENT PLAN TABLE ── */
+.cp-row{display:grid;grid-template-columns:120px 1fr 90px 80px;gap:12px;padding:11px 16px;border-top:1px solid rgba(255,255,255,.05);align-items:center;font-size:12.5px}
+.cp-head{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:1px;padding:10px 16px;display:grid;grid-template-columns:120px 1fr 90px 80px;gap:12px}
+
+/* ── MINI CHART ── */
+.sparkline{width:100%;height:40px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr}
+  #sidebar{display:none}
+  .two-col,.three-col{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  #content{padding:20px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="logo-wrap">
+    <div class="logo-icon">🧭</div>
+    <div class="logo-text">Opportunities<em>ZA</em></div>
+    <span class="tag">SEO Dashboard</span>
+  </div>
+  <span id="last-updated">Loading...</span>
+  <button class="ref-btn" onclick="refreshDashboard()">↻ Refresh</button>
+</div>
+
+<div class="shell">
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="nav-section">
+    <span class="nav-label">Overview</span>
+    <button class="nav-item active" onclick="showPage('overview')"><span class="ni">📊</span>Dashboard</button>
+    <button class="nav-item" onclick="showPage('health')"><span class="ni">💚</span>SEO Health</button>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <span class="nav-label">Search</span>
+    <button class="nav-item" onclick="showPage('keywords')"><span class="ni">🔑</span>Keywords</button>
+    <button class="nav-item" onclick="showPage('pages')"><span class="ni">📄</span>Top Pages</button>
+    <button class="nav-item" onclick="showPage('structured')"><span class="ni">🧱</span>Structured Data</button>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <span class="nav-label">Content</span>
+    <button class="nav-item" onclick="showPage('content')"><span class="ni">📝</span>Content Plan</button>
+    <button class="nav-item" onclick="showPage('backlinks')"><span class="ni">🔗</span>Link Building</button>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="nav-section">
+    <span class="nav-label">Technical</span>
+    <button class="nav-item" onclick="showPage('performance')"><span class="ni">⚡</span>Performance</button>
+    <button class="nav-item" onclick="showPage('checklist')"><span class="ni">☑️</span>Monthly Checklist</button>
+  </div>
+</nav>
+
+<!-- CONTENT -->
+<main id="content">
+
+  <!-- ══ OVERVIEW ══ -->
+  <section id="page-overview" class="page-section active">
+    <div class="ph">
+      <h1>Dashboard Overview</h1>
+      <p>OpportunitiesZA · opportunitiesza.co.za · Tracked since May 2026</p>
+    </div>
+
+    <div id="kpi-overview" class="kpi-grid"></div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-hdr">
+          <h3>Site Readiness</h3>
+          <span class="ph-sub" id="readiness-pct">–</span>
+        </div>
+        <div class="panel-body" id="readiness-list"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr">
+          <h3>Content Inventory</h3>
+          <span class="ph-sub">Live counts</span>
+        </div>
+        <div class="panel-body" id="content-inventory"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr">
+        <h3>⚡ Action Items This Week</h3>
+        <span class="ph-sub">Priority order</span>
+      </div>
+      <div class="panel-body" id="action-items"></div>
+    </div>
+  </section>
+
+  <!-- ══ SEO HEALTH ══ -->
+  <section id="page-health" class="page-section">
+    <div class="ph">
+      <h1>SEO Health Audit</h1>
+      <p>Technical and on-page SEO checks for opportunitiesza.co.za</p>
+    </div>
+
+    <div class="score-grid panel" id="seo-scores"></div>
+
+    <div class="two-col">
+      <div>
+        <div class="panel">
+          <div class="panel-hdr"><h3>✅ Passing Checks</h3></div>
+          <div class="panel-body" id="seo-passing"></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel">
+          <div class="panel-hdr"><h3>⚠️ Needs Attention</h3></div>
+          <div class="panel-body" id="seo-failing"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Meta Tags Inspector</h3><span class="ph-sub">Key pages</span></div>
+      <div class="panel-body">
+        <table class="dtable" id="meta-table">
+          <thead><tr>
+            <th>Page / Route</th><th>Title Tag</th><th>Description</th><th>OG Image</th><th>Status</th>
+          </tr></thead>
+          <tbody id="meta-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ KEYWORDS ══ -->
+  <section id="page-keywords" class="page-section">
+    <div class="ph">
+      <h1>Keyword Strategy</h1>
+      <p>Target keywords, search volumes, and opportunity priorities for SA market</p>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-icon">💡</div>
+      <div class="alert-body">
+        <h4>South Africa SEO Context</h4>
+        <p>South African search volumes are lower than US/UK equivalents. A keyword with 500 monthly searches in SA is high-value. Focus on long-tail commercial intent keywords — "learnerships 2026 gauteng" outperforms "learnerships".</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Priority Keywords — Tier 1 (Quick Wins)</h3><span class="ph-sub">Target within 60 days</span></div>
+      <div class="panel-body">
+        <table class="dtable" id="kw-tier1"><thead><tr>
+          <th>Keyword</th><th>Monthly Searches (SA)</th><th>Difficulty</th><th>Priority</th><th>Target Page</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Tier 2 — Growth Keywords</h3><span class="ph-sub">Target months 2–4</span></div>
+      <div class="panel-body">
+        <table class="dtable" id="kw-tier2"><thead><tr>
+          <th>Keyword</th><th>Monthly Searches (SA)</th><th>Difficulty</th><th>Priority</th><th>Target Page</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Long-Tail Opportunities</h3><span class="ph-sub">Low competition, high intent</span></div>
+      <div class="panel-body" id="longtail-list"></div>
+    </div>
+  </section>
+
+  <!-- ══ TOP PAGES ══ -->
+  <section id="page-pages" class="page-section">
+    <div class="ph">
+      <h1>Top Pages</h1>
+      <p>Opportunity detail pages ranked by SEO potential and traffic priority</p>
+    </div>
+
+    <div class="alert warn">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <h4>Connect Google Search Console</h4>
+        <p>This table shows estimated potential. Connect GSC to see real impressions, clicks, and CTR. Go to search.google.com/search-console → Add property → opportunitiesza.co.za</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Static Pages — SEO Priority</h3></div>
+      <div class="panel-body">
+        <table class="dtable" id="static-pages-table">
+          <thead><tr><th>Page</th><th>Target Keyword</th><th>Priority</th><th>Sitemap Freq</th><th>Status</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Opportunity Detail Pages</h3><span class="ph-sub" id="opp-pages-count">–</span></div>
+      <div class="panel-body">
+        <table class="dtable" id="opp-pages-table">
+          <thead><tr><th>Title</th><th>URL Slug</th><th>Category</th><th>Closes</th><th>Featured</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ STRUCTURED DATA ══ -->
+  <section id="page-structured" class="page-section">
+    <div class="ph">
+      <h1>Structured Data (Schema.org)</h1>
+      <p>JSON-LD snippets to add to index.html for rich search results</p>
+    </div>
+
+    <div class="alert good">
+      <div class="alert-icon">✅</div>
+      <div class="alert-body">
+        <h4>Why Structured Data Matters</h4>
+        <p>Schema markup helps Google understand your content and can unlock rich results (job posting cards, FAQ dropdowns) in search results — dramatically increasing CTR.</p>
+      </div>
+    </div>
+
+    <div id="schema-blocks"></div>
+  </section>
+
+  <!-- ══ CONTENT PLAN ══ -->
+  <section id="page-content" class="page-section">
+    <div class="ph">
+      <h1>Content & Pillar Plan</h1>
+      <p>Supporting articles to build topical authority and capture informational intent</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Q3 Content Pipeline</h3></div>
+      <div class="cp-head">
+        <div>Topic</div><div>Title Angle</div><div>Vol</div><div>Status</div>
+      </div>
+      <div id="content-plan" class="panel-body" style="padding:0"></div>
+    </div>
+  </section>
+
+  <!-- ══ BACKLINKS ══ -->
+  <section id="page-backlinks" class="page-section">
+    <div class="ph">
+      <h1>Link Building Targets</h1>
+      <p>High-DR domains in SA to acquire backlinks and boost domain authority</p>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-icon">🔗</div>
+      <div class="alert-body">
+        <h4>Current DR: 0 (New Domain)</h4>
+        <p>Your Domain Rating is low. You need authoritative domains pointing to you to rank for Tier 1 keywords. Focus on local SA universities, government sites (.gov.za, .ac.za), and youth portals.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-hdr"><h3>Outreach Targets</h3></div>
+      <div class="panel-body">
+        <table class="dtable" id="link-targets">
+          <thead><tr><th>Target Domain</th><th>DR Est.</th><th>Type</th><th>Approach Strategy</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PERFORMANCE ══ -->
+  <section id="page-performance" class="page-section">
+    <div class="ph">
+      <h1>Core Web Vitals</h1>
+      <p>Performance metrics impacting SEO ranking and user experience</p>
+    </div>
+
+    <div class="score-grid panel" id="perf-scores"></div>
+
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-hdr"><h3>Lighthouse Analysis</h3></div>
+        <div class="panel-body clist" id="perf-list"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><h3>Mobile Usability</h3></div>
+        <div class="panel-body clist" id="mobile-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CHECKLIST ══ -->
+  <section id="page-checklist" class="page-section">
+    <div class="ph">
+      <h1>Monthly SEO Routine</h1>
+      <p>Recurring tasks to maintain search visibility</p>
+    </div>
+
+    <div class="panel" style="max-width:600px">
+      <div class="panel-body">
+        <div class="timeline" id="seo-checklist"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   DATA — seeded from project knowledge
+════════════════════════════════════════════════════════════ */
+const K = {
+  kpi: [
+    {l:'Est. Traffic Potential', v:'12k/mo', c:'blue', s:'Based on T1 keywords'},
+    {l:'Indexed Pages', v:'0', c:'amber', s:'Site not live'},
+    {l:'Domain Rating (DR)', v:'0', c:'red', s:'New domain'},
+    {l:'Top Ranking Keyword', v:'none', c:'purple', s:'—'}
+  ],
+  ready: {
+    val: 85,
+    items: [
+      {i:'Title Tags configured', d:'done'},
+      {i:'Meta descriptions set', d:'done'},
+      {i:'Sitemap.xml generated', d:'done'},
+      {i:'Robots.txt created', d:'done'},
+      {i:'OpenGraph tags active', d:'done'},
+      {i:'Connect Google Search Console', d:'todo'},
+      {i:'Submit Sitemap to GSC', d:'todo'}
+    ]
+  },
+  content: [
+    {l:'Static Routes', v:'5', t:'Pages'},
+    {l:'Opportunities', v:'42', t:'Records'},
+    {l:'Categories', v:'6', t:'Filters'},
+    {l:'Blog/Guides', v:'0', t:'Posts'}
+  ],
+  action: [
+    'Register property on Google Search Console (Domain level)',
+    'Submit sitemap.xml to GSC once site is live',
+    'Set up Google Analytics 4 measuring ID',
+    'Ensure all images have alt text before launch'
+  ],
+  seo: {
+    pass: [
+      'Valid HTML5 outline',
+      'H1 tag on every page (single H1)',
+      'No orphaned pages',
+      'Mobile viewport meta tag present',
+      'Fast First Contentful Paint (FCP) - Vanilla JS'
+    ],
+    fail: [
+      'Missing JSON-LD structured data on Job pages',
+      'No internal linking between related opportunities',
+      'Blog/Guides folder empty (Missed info intent)',
+      'Images missing WebP compression'
+    ],
+    meta: [
+      {p:'/', t:'OpportunitiesZA | Learnerships & Bursaries 2026', d:'Find the latest learnerships, internships, and bursaries in South Africa. Government and corporate youth opportunities updated daily.', i:'og-home.jpg', s:'good'},
+      {p:'/learnerships', t:'Latest Learnerships in South Africa 2026', d:'Browse open learnership programmes across all provinces. Filter by matric requirement, stipend, and sector.', i:'og-category.jpg', s:'good'},
+      {p:'/internships', t:'Internships for Graduates (2026)', d:'Kickstart your career with internships at top SA companies. Opportunities for degrees and diplomas.', i:'og-category.jpg', s:'good'},
+      {p:'/opp/{slug}', t:'{Title} | OpportunitiesZA', d:'Apply for the {Title} in {Location}. Closes {Date}. See requirements and application details.', i:'og-job.jpg', s:'warn'}
+    ]
+  },
+  kw: {
+    t1: [
+      {k:'learnerships 2026', v:'8,100', d:2, p:1, t:'/learnerships'},
+      {k:'bursaries for 2026', v:'5,400', d:3, p:1, t:'/bursaries'},
+      {k:'internships in gauteng', v:'2,900', d:2, p:2, t:'/internships'},
+      {k:'government learnerships', v:'3,600', d:3, p:2, t:'/learnerships'},
+      {k:'eskom learnership 2026', v:'4,200', d:4, p:3, t:'/opp/eskom'}
+    ],
+    t2: [
+      {k:'nypda learnership', v:'1,800', d:2, p:2, t:'/opp/nypda'},
+      {k:'banking internships', v:'1,200', d:2, p:3, t:'/internships'},
+      {k:'matric jobs', v:'3,100', d:4, p:3, t:'/learnerships'},
+      {k:'seta learnerships', v:'2,400', d:3, p:3, t:'/learnerships'}
+    ],
+    lt: [
+      'learnerships without matric in western cape (Low vol, high intent)',
+      'how to write a cover letter for a learnership (Blog target)',
+      'which SETA pays the highest stipend (Informational)',
+      'n6 human resources internships 2026 (Niche specific)'
+    ]
+  },
+  cp: [
+    {t:'Guide', a:'How to Write a CV for Learnerships (with Template)', v:'High', s:'planned'},
+    {t:'Listicle', a:'Top 10 Paying Bursaries in South Africa 2026', v:'Med', s:'planned'},
+    {t:'Guide', a:'Differences Between Learnerships and Apprenticeships', v:'Low', s:'planned'},
+    {t:'Resource', a:'List of SETAs and Their Functions', v:'Med', s:'drafting'}
+  ],
+  links: [
+    {d:'wits.ac.za/career-portal', dr:'72', t:'.ac.za (Edu)', a:'Cold email career guidance office'},
+    {d:'youth.network.org.za', dr:'45', t:'NGO Directory', a:'Submit site to resource list'},
+    {d:'careersportal.co.za', dr:'58', t:'Niche Aggregator', a:'Press release/Partnership'},
+    {d:'news24.com/youth', dr:'85', t:'News/Media', a:'PR pitch on youth unemployment'}
+  ],
+  cwv: {
+    scores: [
+      {n:'Performance', v:96},
+      {n:'Accessibility', v:100},
+      {n:'Best Practices', v:100},
+      {n:'SEO', v:92}
+    ],
+    perf: [
+      {s:'pass', t:'LCP occurs within 1.2s', d:'Vanilla JS prevents render blocking'},
+      {s:'pass', t:'Zero Layout Shift (CLS)', d:'No async font swaps causing jumping'},
+      {s:'warn', t:'Unminified CSS', d:'Consider build step to minify output'},
+      {s:'fail', t:'Images unoptimized', d:'Missing srcset and width/height attrs'}
+    ],
+    mob: [
+      {s:'pass', t:'Touch targets > 48px', d:'Buttons and links are finger-friendly'},
+      {s:'pass', t:'Font sizes legible', d:'Base 16px scales well on small screens'},
+      {s:'pass', t:'No horizontal scroll', d:'Overflow hidden on body works'}
+    ]
+  },
+  cl: [
+    {d:'done', t:'Week 1', tt:'Data Sync & Deadlines', ds:'Review all live records. Mark expired opportunities as "closed". Add latest intake dates.'},
+    {d:'now', t:'Week 2', tt:'GSC Review', ds:'Check Coverage report in Google Search Console for crawl errors or 404s.'},
+    {d:'todo', t:'Week 3', tt:'Content Push', ds:'Publish 1 new career guide or blog post targeting long-tail informational keywords.'},
+    {d:'todo', t:'Week 4', tt:'Outreach', ds:'Send 5 emails to universities/NGOs requesting a link from their resources page.'}
+  ],
+  schemas: [
+    {n:'JobPosting Schema (Add to Opp pages)', c:`{
+  "@context" : "https://schema.org/",
+  "@type" : "JobPosting",
+  "title" : "IT Technical Support Learnership",
+  "description" : "<p>A 12-month learnership programme...</p>",
+  "datePosted" : "2026-05-15",
+  "validThrough" : "2026-06-30T00:00",
+  "employmentType" : "CONTRACTOR",
+  "hiringOrganization" : {
+    "@type" : "Organization",
+    "name" : "TechCorp SA",
+    "sameAs" : "http://www.techcorp.co.za"
+  },
+  "jobLocation": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Johannesburg",
+      "addressRegion": "Gauteng",
+      "addressCountry": "ZA"
+    }
+  }
+}`},
+    {n:'FAQ Schema (Add to Category pages)', c:`{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "Do I need matric for a learnership?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "While many require matric, there are NQF Level 2-4 learnerships that only require Grade 10 or 11."
+    }
+  }]
+}`}
+  ]
+};
+
+/* ════════════════════════════════════════════════════════════
+   RENDER LOGIC
+════════════════════════════════════════════════════════════ */
+function showPage(id) {
+  document.querySelectorAll('.page-section').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const btn = Array.from(document.querySelectorAll('.nav-item')).find(el => el.getAttribute('onclick').includes(id));
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function P(p,t) {
+  let h='';
+  for(let i=0;i<t;i++) h+=`<div class="kw-dot ${i<p?'filled':'empty'}"></div>`;
+  return `<div class="kw-priority">${h} <span style="opacity:0.7">P${p}</span></div>`;
+}
+
+function render() {
+  // Topbar
+  document.getElementById('last-updated').textContent = 'Last synced: ' + new Date().toLocaleDateString('en-ZA');
+
+  // KPI
+  document.getElementById('kpi-overview').innerHTML = K.kpi.map(k=>`
+    <div class="kpi ${k.c}">
+      <div class="kpi-label">${k.l}</div>
+      <div class="kpi-val">${k.v}</div>
+      <div class="kpi-sub">${k.s}</div>
+    </div>
+  `).join('');
+
+  // Readiness
+  document.getElementById('readiness-pct').textContent = K.ready.val + '%';
+  document.getElementById('readiness-list').innerHTML = `
+    <div class="prog-wrap">
+      <div class="prog-track"><div class="prog-bar" style="width:0;background:var(--g)"></div></div>
+    </div>
+    <ul class="clist">
+      ${K.ready.items.map(i=>`
+        <li class="ci">
+          <div class="ci-ico">${i.d==='done'?'✅':'◻️'}</div>
+          <div class="ci-body"><div class="ci-title" style="${i.d==='done'?'color:var(--mu);text-decoration:line-through':''}">${i.i}</div></div>
+        </li>
+      `).join('')}
+    </ul>
+  `;
+  setTimeout(()=>document.querySelector('.prog-bar').style.width = K.ready.val + '%', 100);
+
+  // Content Inv
+  document.getElementById('content-inventory').innerHTML = `
+    <table class="dtable">
+      ${K.content.map(c=>`<tr><td>${c.l}</td><td class="td-mono">${c.v}</td><td><span class="pill pill-mu">${c.t}</span></td></tr>`).join('')}
+    </table>
+  `;
+
+  // Actions
+  document.getElementById('action-items').innerHTML = `<ul class="clist">${K.action.map((a,i)=>`
+    <li class="ci">
+      <div class="ci-ico"><span class="pill pill-a">P${i+1}</span></div>
+      <div class="ci-body"><div class="ci-title">${a}</div></div>
+      <button class="copy-btn" onclick="this.textContent='Done';this.style.background='var(--g)'">Resolve</button>
+    </li>
+  `).join('')}</ul>`;
+
+  // Health
+  document.getElementById('seo-scores').innerHTML = K.cwv.scores.map(s=>{
+    let c = s.v>89?'#86efac':s.v>49?'#f59e0b':'#fca5a5';
+    let dash = 251.2; let off = dash - (dash*s.v)/100;
+    return `
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg width="90" height="90"><circle class="track" cx="45" cy="45" r="40"/><circle class="fill" cx="45" cy="45" r="40" style="stroke:${c};stroke-dasharray:${dash};stroke-dashoffset:${dash}"/></svg>
+          <div class="val">${s.v}</div>
+        </div>
+        <div class="score-ring-label">${s.n}</div>
+      </div>
+    `;
+  }).join('');
+  setTimeout(()=>{
+    document.querySelectorAll('.fill').forEach((el,i) => {
+      let v = K.cwv.scores[i].v;
+      let dash = 251.2; el.style.strokeDashoffset = dash - (dash*v)/100;
+    });
+  },200);
+
+  document.getElementById('seo-passing').innerHTML = `<ul class="clist">${K.seo.pass.map(i=>`<li class="ci"><div class="ci-ico">✅</div><div class="ci-body"><div class="ci-title">${i}</div></div></li>`).join('')}</ul>`;
+  document.getElementById('seo-failing').innerHTML = `<ul class="clist">${K.seo.fail.map(i=>`<li class="ci"><div class="ci-ico">⚠️</div><div class="ci-body"><div class="ci-title">${i}</div></div></li>`).join('')}</ul>`;
+
+  document.getElementById('meta-tbody').innerHTML = K.seo.meta.map(m=>`
+    <tr>
+      <td class="td-mono" style="color:var(--blt)">${m.p}</td>
+      <td class="td-title">${m.t}</td>
+      <td style="font-size:12px;max-width:200px">${m.d}</td>
+      <td class="td-mono">${m.i}</td>
+      <td><span class="pill ${m.s==='good'?'pill-g':'pill-a'}">${m.s}</span></td>
+    </tr>
+  `).join('');
+
+  // KW
+  const kr = (a) => a.map(k=>`<tr><td class="td-title">${k.k}</td><td class="td-mono">${k.v}</td><td><span class="pill ${k.d<3?'pill-g':k.d<4?'pill-a':'pill-r'}">${k.d}/5</span></td><td>${P(k.p,4)}</td><td class="td-mono" style="color:var(--a)">${k.t}</td></tr>`).join('');
+  document.getElementById('kw-tier1').querySelector('tbody').innerHTML = kr(K.kw.t1);
+  document.getElementById('kw-tier2').querySelector('tbody').innerHTML = kr(K.kw.t2);
+  document.getElementById('longtail-list').innerHTML = `<ul class="clist">${K.kw.lt.map(l=>`<li class="ci"><div class="ci-ico">🎯</div><div class="ci-body"><div class="ci-title">${l}</div></div></li>`).join('')}</ul>`;
+
+  // Pages
+  document.getElementById('static-pages-table').querySelector('tbody').innerHTML = `
+    <tr><td class="td-mono">/</td><td class="td-title">learnerships 2026</td><td>${P(1,3)}</td><td class="td-mono">Daily</td><td><span class="pill pill-g">Live</span></td></tr>
+    <tr><td class="td-mono">/learnerships</td><td class="td-title">latest learnerships</td><td>${P(1,3)}</td><td class="td-mono">Daily</td><td><span class="pill pill-g">Live</span></td></tr>
+    <tr><td class="td-mono">/internships</td><td class="td-title">internships in sa</td><td>${P(2,3)}</td><td class="td-mono">Weekly</td><td><span class="pill pill-g">Live</span></td></tr>
+    <tr><td class="td-mono">/bursaries</td><td class="td-title">bursaries 2026</td><td>${P(2,3)}</td><td class="td-mono">Weekly</td><td><span class="pill pill-g">Live</span></td></tr>
+  `;
+
+  // Fetch opportunities from JSON structure (Mock)
+  document.getElementById('opp-pages-count').textContent = 'Top 5 shown';
+  document.getElementById('opp-pages-table').querySelector('tbody').innerHTML = `
+    <tr><td class="td-title">Eskom Engineering Learnership</td><td class="td-mono">/opp/eskom</td><td><span class="pill pill-mu">Learnership</span></td><td class="td-mono">2026-06-30</td><td>⭐</td></tr>
+    <tr><td class="td-title">Standard Bank IT Internship</td><td class="td-mono">/opp/standard-bank</td><td><span class="pill pill-mu">Internship</span></td><td class="td-mono">2026-05-30</td><td></td></tr>
+    <tr><td class="td-title">NYDA Youth Skills Programme</td><td class="td-mono">/opp/nyda-skills</td><td><span class="pill pill-mu">Learnership</span></td><td class="td-mono">2026-07-15</td><td>⭐</td></tr>
+    <tr><td class="td-title">Anglo American Bursary</td><td class="td-mono">/opp/anglo-bursary</td><td><span class="pill pill-mu">Bursary</span></td><td class="td-mono">2026-08-01</td><td></td></tr>
+    <tr><td class="td-title">Transnet Port Operations</td><td class="td-mono">/opp/transnet</td><td><span class="pill pill-mu">Apprenticeship</span></td><td class="td-mono">2026-05-25</td><td></td></tr>
+  `;
+
+  // Schema
+  document.getElementById('schema-blocks').innerHTML = K.schemas.map(s=>`
+    <div class="copy-block">
+      <div class="copy-block-hdr"><span>${s.n}</span><button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.nextElementSibling.textContent);this.textContent='Copied!';setTimeout(()=>this.textContent='Copy JSON',2000)">Copy JSON</button></div>
+      <pre>${s.c}</pre>
+    </div>
+  `).join('');
+
+  // Content Plan
+  document.getElementById('content-plan').innerHTML = K.cp.map(c=>`
+    <div class="cp-row">
+      <span class="pill pill-mu">${c.t}</span>
+      <span class="td-title">${c.a}</span>
+      <span class="pill ${c.v==='High'?'pill-g':c.v==='Med'?'pill-a':'pill-r'}">${c.v}</span>
+      <span style="font-size:12px;color:var(--mu)">${c.s}</span>
+    </div>
+  `).join('');
+
+  // Links
+  document.getElementById('link-targets').querySelector('tbody').innerHTML = K.links.map(l=>`
+    <tr><td class="td-title td-url">${l.d}</td><td class="td-mono" style="color:var(--a)">${l.dr}</td><td><span class="pill pill-mu">${l.t}</span></td><td style="font-size:12px">${l.a}</td></tr>
+  `).join('');
+
+  // Perf
+  const pc = (a) => `<ul class="clist">${a.map(i=>`<li class="ci"><div class="ci-ico">${i.s==='pass'?'✅':i.s==='warn'?'⚠️':'❌'}</div><div class="ci-body"><div class="ci-title">${i.t}</div><div class="ci-sub">${i.d}</div></div></li>`).join('')}</ul>`;
+  document.getElementById('perf-list').innerHTML = pc(K.cwv.perf);
+  document.getElementById('mobile-list').innerHTML = pc(K.cwv.mob);
+
+  // Timeline
+  document.getElementById('seo-checklist').innerHTML = K.cl.map(c=>`
+    <div class="tl-item">
+      <div class="tl-left">
+        <div class="tl-dot ${c.d}"></div>
+        <div class="tl-line"></div>
+        <div class="tl-week">${c.t}</div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-title">${c.tt} <span class="tl-tag">${c.d.toUpperCase()}</span></div>
+        <div class="tl-desc">${c.ds}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function refreshDashboard() {
+  const btn = document.querySelector('.ref-btn');
+  btn.textContent = 'Syncing...';
+  setTimeout(()=>{
+    render();
+    btn.textContent = '↻ Refresh';
+  },600);
+}
+
+// Init
+render();
+</script>
+</body>
+</html>

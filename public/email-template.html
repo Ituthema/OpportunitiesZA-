@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OpportunitiesZA — Email Template Generator</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--g:#0d4a26;--a:#f59e0b;--bd:#e5e7eb;--sur:#f8fafc;}
+  body{font-family:system-ui,'DM Sans',sans-serif;background:#f8fafc;padding:24px;font-size:14px;color:#111;}
+  .wrap{max-width:1000px;margin:0 auto}
+  .header{background:var(--g);color:#fff;border-radius:12px;padding:24px 28px;margin-bottom:24px;display:flex;align-items:center;gap:14px;}
+  .header-icon{font-size:32px; background:rgba(255,255,255,0.1); width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:12px;}
+  .header h1{font-size:22px;font-weight:700;margin-bottom:4px;}
+  .header p{font-size:14px;color:#a7f3d0}
+  
+  .grid{display:grid;grid-template-columns:300px 1fr;gap:24px;}
+  @media(max-width:800px){.grid{grid-template-columns:1fr;}}
+  
+  .card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:24px;}
+  .card h2{font-size:15px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--bd);}
+  
+  .field{margin-bottom:16px}
+  label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#4b5563;margin-bottom:6px}
+  input,textarea{width:100%;padding:9px 12px;border:1px solid var(--bd);border-radius:6px;font-size:13.5px;font-family:inherit;}
+  textarea{min-height:120px;resize:vertical;font-family:'DM Mono',monospace;font-size:12px;white-space:pre;}
+  
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:6px;font-weight:600;font-size:13.5px;cursor:pointer;border:none;background:var(--g);color:#fff;}
+  .btn-ghost{background:none;color:#4b5563;border:1px solid var(--bd);}
+  
+  .preview-wrapper{border:1px solid var(--bd);border-radius:8px;overflow:hidden;background:#fff;}
+  .preview-header{background:#f1f5f9;padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;color:#334155;}
+  
+  iframe{width:100%;height:600px;border:none;}
+  
+  .raw-code{display:none;width:100%;height:600px;border:none;padding:16px;font-family:'DM Mono',monospace;font-size:12px;background:#1e293b;color:#a5b4fc;resize:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="header-icon">📧</div>
+    <div>
+      <h1>OpportunitiesZA — Email Template Builder</h1>
+      <p>Generate responsive, inline-styled HTML emails for Mailchimp/SendGrid campaigns.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Campaign Data</h2>
+      
+      <div class="field">
+        <label>Newsletter Subject</label>
+        <input type="text" id="e_subject" value="Top 5 Learnerships Closing This Week! 🚨" oninput="buildEmail()">
+      </div>
+      
+      <div class="field">
+        <label>Intro Text</label>
+        <textarea id="e_intro" oninput="buildEmail()">Hi there,
+
+Here are the top opportunities available in South Africa this week. Don't miss out on these deadlines!</textarea>
+      </div>
+
+      <div class="field">
+        <label>JSON Data Array (Items)</label>
+        <textarea id="e_json" oninput="buildEmail()">[
+  {
+    "title": "Eskom Engineering Learnership 2026",
+    "location": "Gauteng",
+    "close": "30 June 2026",
+    "link": "https://opportunitiesza.co.za/opp/eskom-engineering"
+  },
+  {
+    "title": "Standard Bank IT Internship",
+    "location": "Nationwide",
+    "close": "15 July 2026",
+    "link": "https://opportunitiesza.co.za/opp/standard-bank-it"
+  }
+]</textarea>
+        <div style="font-size:11px;color:#64748b;margin-top:4px;">Paste array of objects with title, location, close, link</div>
+      </div>
+      
+      <button class="btn" style="width:100%;margin-bottom:8px" onclick="copyHTML()">📋 Copy Full HTML</button>
+      <button class="btn btn-ghost" style="width:100%" onclick="toggleView()" id="viewBtn">Show Raw HTML</button>
+    </div>
+
+    <div class="card" style="padding:0">
+      <div class="preview-wrapper">
+        <div class="preview-header">
+          <span>Live Preview</span>
+          <span style="font-weight:400;color:#64748b">Desktop width shown</span>
+        </div>
+        <iframe id="preview_frame"></iframe>
+        <textarea id="raw_html" class="raw-code" readonly></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function buildEmail() {
+  const subject = document.getElementById('e_subject').value;
+  const intro = document.getElementById('e_intro').value.replace(/\n/g, '<br>');
+  let items = [];
+  try {
+    items = JSON.parse(document.getElementById('e_json').value);
+  } catch(e) {}
+  
+  let itemsHtml = '';
+  items.forEach(item => {
+    itemsHtml += `
+      <!-- JOB ITEM -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;">
+        <tr>
+          <td style="padding:20px;">
+            <h3 style="margin:0 0 8px 0;font-size:18px;color:#111827;font-family:Arial,sans-serif;">\${item.title || 'Untitled'}</h3>
+            <p style="margin:0 0 12px 0;font-size:14px;color:#4b5563;font-family:Arial,sans-serif;">
+              <strong>📍 Location:</strong> \${item.location || 'N/A'}<br>
+              <strong>⏳ Closes:</strong> \${item.close || 'N/A'}
+            </p>
+            <table cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td align="center" bgcolor="#0d4a26" style="border-radius:6px;">
+                  <a href="\${item.link || '#'}" target="_blank" style="display:inline-block;padding:10px 20px;font-family:Arial,sans-serif;color:#ffffff;font-size:14px;font-weight:bold;text-decoration:none;border-radius:6px;">Apply Now &rarr;</a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    `;
+  });
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>\${subject}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f1f5f9">
+    <tr>
+      <td align="center" style="padding:40px 15px;">
+        <!-- MAIN CONTAINER -->
+        <table width="100%" max-width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.05);">
+          <!-- HEADER -->
+          <tr>
+            <td bgcolor="#0d4a26" align="center" style="padding:30px 20px;">
+              <h1 style="color:#ffffff;margin:0;font-size:24px;letter-spacing:-0.5px;">Opportunities<span style="color:#f59e0b;">ZA</span></h1>
+            </td>
+          </tr>
+          <!-- BODY -->
+          <tr>
+            <td style="padding:30px 20px;">
+              <p style="margin:0 0 24px 0;font-size:16px;line-height:1.6;color:#374151;">
+                \${intro}
+              </p>
+              
+              \${itemsHtml}
+              
+            </td>
+          </tr>
+          <!-- FOOTER -->
+          <tr>
+            <td bgcolor="#f8fafc" align="center" style="padding:24px 20px;border-top:1px solid #e5e7eb;">
+              <p style="margin:0;font-size:12px;color:#64748b;">
+                You are receiving this because you subscribed on our website.<br>
+                &copy; 2026 OpportunitiesZA. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  document.getElementById('raw_html').value = html;
+  const doc = document.getElementById('preview_frame').contentWindow.document;
+  doc.open();
+  doc.write(html);
+  doc.close();
+}
+
+function copyHTML() {
+  const html = document.getElementById('raw_html').value;
+  navigator.clipboard.writeText(html).then(() => {
+    alert("HTML copied to clipboard!");
+  });
+}
+
+function toggleView() {
+  const frame = document.getElementById('preview_frame');
+  const raw = document.getElementById('raw_html');
+  const btn = document.getElementById('viewBtn');
+  
+  if(frame.style.display === 'none') {
+    frame.style.display = 'block';
+    raw.style.display = 'none';
+    btn.textContent = 'Show Raw HTML';
+  } else {
+    frame.style.display = 'none';
+    raw.style.display = 'block';
+    btn.textContent = 'Show Preview';
+  }
+}
+
+// Init
+buildEmail();
+</script>
+</body>
+</html>

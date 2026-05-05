@@ -1,0 +1,128 @@
+{
+  "name": "OpportunitiesZA",
+  "short_name": "OppsZA",
+  "description": "South Africa's platform for verified learnerships, bursaries, internships, and apprenticeships. Updated daily.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fafaf9",
+  "theme_color": "#0d4a26",
+  "lang": "en-ZA",
+  "dir": "ltr",
+  "categories": ["education", "government", "career"],
+  "iarc_rating_id": "",
+
+  "icons": [
+    {
+      "src": "/assets/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "/assets/screenshots/home-mobile.jpg",
+      "sizes": "390x844",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Home — Browse learnerships, bursaries and internships"
+    },
+    {
+      "src": "/assets/screenshots/detail-mobile.jpg",
+      "sizes": "390x844",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Opportunity detail — full eligibility and application info"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Learnerships 2026",
+      "short_name": "Learnerships",
+      "description": "Browse all active learnerships in South Africa",
+      "url": "/?page=learnerships",
+      "icons": [{ "src": "/assets/icons/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Bursaries 2026",
+      "short_name": "Bursaries",
+      "description": "Find bursaries open for 2026 applications",
+      "url": "/?page=bursaries",
+      "icons": [{ "src": "/assets/icons/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Deadline Calendar",
+      "short_name": "Calendar",
+      "description": "See all upcoming closing dates",
+      "url": "/?page=calendar",
+      "icons": [{ "src": "/assets/icons/icon-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Eligibility Checker",
+      "short_name": "Checker",
+      "description": "Check which opportunities you qualify for",
+      "url": "/?page=tools",
+      "icons": [{ "src": "/assets/icons/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+
+  "related_applications": [],
+  "prefer_related_applications": false,
+
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OpportunitiesZA — Project Directory</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--g:#0d4a26;--a:#f59e0b;--bd:#e5e7eb}
+  body{font-family:system-ui,'DM Sans',sans-serif;background:#f8fafc;color:#111;padding:40px 20px;line-height:1.6}
+  .wrap{max-width:800px;margin:0 auto}
+  .header{text-align:center;margin-bottom:40px}
+  .header h1{font-size:28px;font-weight:800;color:var(--g);margin-bottom:10px}
+  .header p{font-size:15px;color:#4b5563;max-width:500px;margin:0 auto}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+  .card{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:24px;text-decoration:none;color:inherit;transition:all .2s;display:flex;flex-direction:column;align-items:flex-start}
+  .card:hover{border-color:var(--g);transform:translateY(-2px);box-shadow:0 10px 25px rgba(13,74,38,.05)}
+  .icon{font-size:32px;margin-bottom:16px;background:#f0fdf4;width:64px;height:64px;display:flex;align-items:center;justify-content:center;border-radius:12px}
+  .card h2{font-size:18px;font-weight:700;margin-bottom:8px}
+  .card p{font-size:14px;color:#6b7280;margin-bottom:20px;flex:1}
+  .btn{display:inline-flex;align-items:center;font-size:13px;font-weight:700;color:var(--g);gap:6px}
+  .card:hover .btn{color:#052e16}
+  .btn::after{content:'→';transition:transform .2s}
+  .card:hover .btn::after{transform:translateX(4px)}
+  .status{margin-top:40px;padding:20px;background:#fff;border:1px solid var(--bd);border-radius:12px;display:flex;align-items:center;justify-content:space-between}
+  .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:4px 8px;border-radius:6px;background:#fef3c7;color:#b45309}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>OpportunitiesZA Tools</h1>
+    <p>Local utility scripts to manage and maintain the platform data.</p>
+  </div>
+
+  <div class="grid">
+    <a href="admin-uploader.html" class="card">
+      <div class="icon">📝</div>
+      <h2>Data Uploader</h2>
+      <p>Clean GUI to generate strictly formatted JSON records for opportunities. Prevents syntax errors in main data file.</p>
+      <div class="btn">Open App</div>
+    </a>
+
+    <a href="seo-dashboard.html" class="card">
+      <div class="icon">📊</div>
+      <h2>SEO Dashboard</h2>
+      <p>Track metrics, keyword strategy, and technical health for opportunitiesza.co.za.</p>
+      <div class="btn">Open App</div>
+    </a>
+
+    <a href="social-toolkit.html" class="card">
+      <div class="icon">📢</div>
+      <h2>Social Toolkit</h2>
+      <p>Generate perfectly formatted cross-platform social media posts from a single opportunity input.</p>
+      <div class="btn">Open App</div>
+    </a>
+
+    <a href="email-template.html" class="card">
+      <div class="icon">📧</div>
+      <h2>Email Builder</h2>
+      <p>Create responsive HTML newsletter campaigns for Mailchimp from opportunity JSON arrays.</p>
+      <div class="btn">Open App</div>
+    </a>
+
+    <a href="validator.html" class="card" style="opacity:0.6;pointer-events:none">
+      <div class="icon">🔍</div>
+      <h2>JSON Validator (WIP)</h2>
+      <p>Validate the opportunities.json file against schema rules to catch missing or malformed data before deployment.</p>
+      <div class="btn">Coming Soon</div>
+    </a>
+  </div>
+
+  <div class="status">
+    <div style="font-size:13px;color:#6b7280">Current Build: <strong>v1.0.0</strong><br>Environment: <strong>Local Development</strong></div>
+    <div class="badge">Internal Only</div>
+  </div>
+</div>
+</body>
+</html>
