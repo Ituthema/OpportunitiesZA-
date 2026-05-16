@@ -1,0 +1,29 @@
+! Custom popup/ad blocker list
+! Generated from browsing history screenshot
+
+||stripchat.com^
+||localnews.click^
+||eezuljgf.com^
+
+/overlay.php
+
+##iframe
+##.popup
+##.overlay
+##.ad-container
+##.fullscreen-ad
+##.video-ads
+##.sponsored
+##.tracking-banner
+
+*$popup
+*$third-party
+*$script,third-party
+*$subdocument,third-party
+
+||stripchat.com^$popup
+||stripchat.com^$subdocument
+||stripchat.com^$third-party
+
+||localnews.click^$all
+||eezuljgf.com^$all
